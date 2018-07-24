@@ -5,13 +5,21 @@ var User = sequelize.import('../models/user');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 
+// FOR TESTING
+router.post("/test", (req, res) => {
+    User.create({
+        email: req.body.email,
+        password: req.body.password
+    }) 
+    .then(user => res.json(user))
+    .catch(err => res.send(500, err.message))
+})
+
 router.post('/create', (req, res) => {
-    var pass = req.body.user.password;
+    var pass = req.body.password;
 
     User.create({
-        first_name: req.body.user.first_name,
-        last_name: req.body.user.last_name,
-        email: req.body.user.email,
+        email: req.body.email,
         password: bcrypt.hashSync(pass, 10)
     }).then(
         createSuccess = (user) => {
@@ -29,11 +37,11 @@ router.post('/create', (req, res) => {
 })
 
 router.post('/signin', function (req, res) {
-    User.findOne({ where: { email: req.body.user.email } })
+    User.findOne({ where: { email: req.body.email } })
         .then(
             (user) => {
                 if (user) {
-                    bcrypt.compare(req.body.user.password, user.password, (err, matches) => {
+                    bcrypt.compare(req.body.password, user.password, (err, matches) => {
                         if (matches) {
                             var token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 * 7 })
                             res.json({

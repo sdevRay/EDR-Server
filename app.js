@@ -8,12 +8,13 @@ var event = require('./controllers/eventcontroller')
 var sequelize = require('./db');
 var bodyParser = require('body-parser');
 
+// sequelize.sync({force:true});
 sequelize.sync();
 
 app.use(bodyParser.json());
 app.use(require('./middleware/headers'));
-
 app.use('/user', user)
+
 app.use(require('./middleware/validate-session'))
 app.use('/event', event)
 app.use('/stat', stat)
