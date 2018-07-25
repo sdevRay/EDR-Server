@@ -42,9 +42,7 @@ router.get('/getall', (req, res) =>{
     })
         .then(
         (stat) => {
-                res.json({
-                    stat: stat
-                })
+                res.json(stat)
             },
              (err) => {
                 res.send(500, err.message);
