@@ -44,9 +44,7 @@ router.get('/myevents', (req, res) => {
     })
     .then(
         (event) => {
-            res.json({
-                event: event
-            })
+            res.json(event)
         },
         (err) => {
             res.send(500, err.message);
@@ -58,13 +56,12 @@ router.get('/myevents', (req, res) => {
 router.get('/allevents', (req, res) => {
     Events.findAll()
     .then(
-        (event) => {
-            res.json({
-                
-                event: event
+        (events) => {
+            res.json(events)
+            },
+            (err) => {
+                res.send(500, err.message)       
             })
-        }
-    )
 })
 
 
