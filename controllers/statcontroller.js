@@ -5,29 +5,24 @@ var Stat = sequelize.import('../models/stat');
 
 //  create a users fitness starting point
 router.post('/create', (req, res) => {
-    var hours = Number(req.body.stat.currentHours)
-    var mins = Number(req.body.stat.currentMinutes)
-    var secs = Number(req.body.stat.currentSeconds)
+    var hours = Number(req.body.currentHours)
+    var mins = Number(req.body.currentMinutes)
+    var secs = Number(req.body.currentSeconds)
     var totalsecs = ((hours*3600)+(mins*60)+(secs))
 
     Stat.create({
-        date: req.body.stat.date,
-        discipline:  req.body.stat.discipline,
-        measurement: req.body.stat.measurement,
-        unit: req.body.stat.unit,
-        currentDistance: req.body.stat.currentDistance,
+        date: req.body.date,
+        discipline:  req.body.discipline,
+        measurement: req.body.measurement,
+        unit: req.body.unit,
+        currentDistance: req.body.currentDistance,
         currentHours: hours,
         currentMinutes: mins,
         currentSeconds: secs,
         totalSeconds: totalsecs,
         owner: req.user.id
     }).then(
-        createSuccess = (stat) => {
-            res.json({
-                stat: stat,
-                message: 'user base stats have been added to database'
-            });
-        },
+        stat => res.json(stat),
         createError = (err) => {
             res.send(500, err.message);
         }
@@ -41,9 +36,7 @@ router.get('/getall', (req, res) =>{
         where: { owner: req.user.id }
     })
         .then(
-        (stat) => {
-                res.json(stat)
-            },
+        stat => res.json(stat),
              (err) => {
                 res.send(500, err.message);
             })
