@@ -6,31 +6,26 @@ var Events = sequelize.import('../models/event');
 
 // create an event for the currently logged in user.  The event will be put in the general data base for everyone to see, but the distance and goal time will only be retrievable by that specific user.
 router.post('/create', (req, res) => {
-    var hours = Number(req.body.event.goalHours)
-    var mins = Number(req.body.event.goalMinutes)
-    var secs = Number(req.body.event.goalSeconds)
+    var hours = Number(req.body.goalHours)
+    var mins = Number(req.body.goalMinutes)
+    var secs = Number(req.body.goalSeconds)
     var totalsecs = ((hours*3600)+(mins*60)+(secs))
 
     Events.create({
-        eventName: req.body.event.eventName,
-        eventCity: req.body.event.eventCity,
-        eventState: req.body.event.eventState,
-        eventDate: req.body.event.eventDate,
-        eventType:  req.body.event.eventType,
-        unit: req.body.event.unit,
-        eventDistance: req.body.event.eventDistance,
+        eventName: req.body.eventName,
+        eventCity: req.body.eventCity,
+        eventState: req.body.eventState,
+        eventDate: req.body.eventDate,
+        eventType:  req.body.eventType,
+        unit: req.body.unit,
+        eventDistance: req.body.eventDistance,
         goalHours: hours,
         goalMinutes: mins,
         goalSeconds: secs,
         goalTotalSeconds: totalsecs,
         owner: req.user.id
     }).then(
-        createSuccess = (event) => {
-            res.json({
-                event: event,
-                message: 'event has been added to the database'
-            });
-        },
+        event => res.json(event),
         createError = (err) => {
             res.send(500, err.message);
         }

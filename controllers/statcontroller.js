@@ -77,8 +77,8 @@ router.put('/update', (req, res) => {
     );
 })
 
-router.delete('/delete', (req, res) => {
-    var userid = req.body.stat.id;
+router.delete('/delete/:id', (req, res) => {
+    var userid = req.params.id;
 
     Stat.destroy({
         where: { id: userid }
