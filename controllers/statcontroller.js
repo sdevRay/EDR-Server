@@ -46,31 +46,28 @@ router.get('/getall', (req, res) =>{
 
 //  will take some refactoring depending on front end- maybe
 router.put('/update', (req, res) => {
-    var hours = Number(req.body.stat.currentHours)
-    var mins = Number(req.body.stat.currentMinutes)
-    var secs = Number(req.body.stat.currentSeconds)
+// router.put('/update/:id', (req, res) => {
+    // var statId = req.body.id;
+    var hours = Number(req.body.currentHours)
+    var mins = Number(req.body.currentMinutes)
+    var secs = Number(req.body.currentSeconds)
     var totalsecs = ((hours*3600)+(mins*60)+(secs))
 
     Stat.update({
-        date: req.body.stat.date,
-        discipline:  req.body.stat.discipline,
-        measurement: req.body.stat.measurement,
-        unit: req.body.stat.unit,
-        currentDistance: req.body.stat.currentDistance,
+        date: req.body.date,
+        discipline:  req.body.discipline,
+        measurement: req.body.measurement,
+        unit: req.body.unit,
+        currentDistance: req.body.currentDistance,
         currentHours: hours,
         currentMinutes: mins,
         currentSeconds: secs,
         totalSeconds: totalsecs,
         owner: req.user.id
     },
-    { where: { id: data } }
+    { where: { id: statId } }
     ).then(
-        updateSuccess = (stat) => {
-            res.json({
-                stat: stat,
-                message: 'user base stats have been updated'
-            });
-        },
+        stat => res.json(stat),
         updateError = (err) => {
             res.send(500, err.message);
         }
@@ -78,10 +75,10 @@ router.put('/update', (req, res) => {
 })
 
 router.delete('/delete', (req, res) => {
-    var userid = req.body.stat.id;
+    var statId = req.body.stat.id;
 
     Stat.destroy({
-        where: { id: userid }
+        where: { id: statId }
     }).then(
         deleteLogSuccess = (data) => {
             res.send("you removed a set of base stats");
