@@ -42,12 +42,22 @@ router.get('/getall', (req, res) =>{
             })
 })
 
+router.get("/getone/:id", (req, res) => {
+    var statId = req.params.id;
+    Stat.findOne({
+        where: { id: statId }
+    }).then(
+        stat => res.json(stat),
+        err => res.status(500).send(err)
+    )
+})
+
 
 
 //  will take some refactoring depending on front end- maybe
-router.put('/update', (req, res) => {
-// router.put('/update/:id', (req, res) => {
-    // var statId = req.body.id;
+router.put('/update/:id', (req, res) => {
+    var statId = req.params.id;
+
     var hours = Number(req.body.currentHours)
     var mins = Number(req.body.currentMinutes)
     var secs = Number(req.body.currentSeconds)
@@ -74,22 +84,13 @@ router.put('/update', (req, res) => {
     );
 })
 
-router.delete('/delete', (req, res) => {
-    var statId = req.body.stat.id;
-
+router.delete('/delete/:id', (req, res) => {
+    var statId = req.params.id;
     Stat.destroy({
         where: { id: statId }
-    }).then(
-        deleteLogSuccess = (data) => {
-            res.send("you removed a set of base stats");
-        },
-        deleteLogError = (err) => {
-            res.send(500, err.message);
-        }
-    );
+    })
+    .then(stat => res.json(stat))
+    .catch(err => res.status(500).send(err))
 })
-
-
-
 
 module.exports = router;
