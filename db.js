@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize');
 
                  
-const sequelize = new Sequelize('EventDrivenTraining', 'postgres', 'mypassword', {
+const sequelize = new Sequelize('EventDrivenTraining', 'postgres', 'viranque1', {
     host: 'localhost', 
     dialect: 'postgres'  
 });
