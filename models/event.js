@@ -1,8 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('event', {
-        objective: {
-            type: DataTypes.STRING,
-        },
         eventName: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -41,25 +38,6 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 
             }
-        },
-        //    user will input time in Hours, Minutes and seconds on the front end. The controller (or services) on the backend will turn that value into raw seconds in the database.  Will make it easier to compare values to their goal.   -rce
-        goalHours: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-        goalMinutes: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-        goalSeconds: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-
-        // currentHours*3600 + currentMinutes*60 + currentSeconds = totalSeconds   ....Obvi
-        goalTotalSeconds: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
         },
         owner: {
             type: DataTypes.INTEGER

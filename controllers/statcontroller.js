@@ -5,21 +5,12 @@ var Stat = sequelize.import('../models/stat');
 
 //  create a users fitness starting point
 router.post('/create', (req, res) => {
-    var hours = Number(req.body.currentHours)
-    var mins = Number(req.body.currentMinutes)
-    var secs = Number(req.body.currentSeconds)
-    var totalsecs = ((hours*3600)+(mins*60)+(secs))
 
     Stat.create({
         date: req.body.date,
         discipline:  req.body.discipline,
-        measurement: req.body.measurement,
         unit: req.body.unit,
         currentDistance: req.body.currentDistance,
-        currentHours: hours,
-        currentMinutes: mins,
-        currentSeconds: secs,
-        totalSeconds: totalsecs,
         owner: req.user.id
     }).then(
         stat => res.json(stat),
@@ -42,6 +33,7 @@ router.get('/getall', (req, res) =>{
             })
 })
 
+// returns one stat card
 router.get("/getone/:id", (req, res) => {
     var statId = req.params.id;
     Stat.findOne({
@@ -52,27 +44,15 @@ router.get("/getone/:id", (req, res) => {
     )
 })
 
-
-
 //  will take some refactoring depending on front end- maybe
 router.put('/update/:id', (req, res) => {
     var statId = req.params.id;
 
-    var hours = Number(req.body.currentHours)
-    var mins = Number(req.body.currentMinutes)
-    var secs = Number(req.body.currentSeconds)
-    var totalsecs = ((hours*3600)+(mins*60)+(secs))
-
     Stat.update({
         date: req.body.date,
         discipline:  req.body.discipline,
-        measurement: req.body.measurement,
         unit: req.body.unit,
         currentDistance: req.body.currentDistance,
-        currentHours: hours,
-        currentMinutes: mins,
-        currentSeconds: secs,
-        totalSeconds: totalsecs,
         owner: req.user.id
     },
     { where: { id: statId } }

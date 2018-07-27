@@ -6,11 +6,7 @@ var Events = sequelize.import('../models/event');
 
 // create an event for the currently logged in user.  The event will be put in the general data base for everyone to see, but the distance and goal time will only be retrievable by that specific user.
 router.post('/create', (req, res) => {
-    var hours = Number(req.body.goalHours)
-    var mins = Number(req.body.goalMinutes)
-    var secs = Number(req.body.goalSeconds)
-    var totalsecs = ((hours*3600)+(mins*60)+(secs))
-
+    
     Events.create({
         eventName: req.body.eventName,
         eventCity: req.body.eventCity,
@@ -19,10 +15,6 @@ router.post('/create', (req, res) => {
         eventType:  req.body.eventType,
         unit: req.body.unit,
         eventDistance: req.body.eventDistance,
-        goalHours: hours,
-        goalMinutes: mins,
-        goalSeconds: secs,
-        goalTotalSeconds: totalsecs,
         owner: req.user.id
     }).then(
         event => res.json(event),
@@ -46,6 +38,17 @@ router.get('/myevents', (req, res) => {
         })
 })
 
+// returns one event card
+router.get("/getone/:id", (req, res) => {
+    var eventId = req.params.id;
+    Events.findOne({
+        where: { id: eventId }
+    }).then(
+        event => res.json(event),
+        err => res.status(500).send(err)
+    )
+})
+
 //get all events in database - ultimately we went it to display just the event name, event location and event date.  all the goal information attached to the user will not be available to other users.
 
 router.get('/allevents', (req, res) => {
@@ -62,11 +65,6 @@ router.get('/allevents', (req, res) => {
 router.put('/update/:id', (req, res) => {
 var eventId = req.params.id;
 
-    var hours = Number(req.body.goalHours)
-    var mins = Number(req.body.goalMinutes)
-    var secs = Number(req.body.goalSeconds)
-    var totalsecs = ((hours*3600)+(mins*60)+(secs))
-
     Events.update({
         eventName: req.body.eventName,
         eventCity: req.body.eventCity,
@@ -75,10 +73,6 @@ var eventId = req.params.id;
         eventType:  req.body.eventType,
         unit: req.body.unit,
         eventDistance: req.body.eventDistance,
-        goalHours: hours,
-        goalMinutes: mins,
-        goalSeconds: secs,
-        goalTotalSeconds: totalsecs,
         owner: req.user.id
     },
     { where: { id: eventId } }
@@ -98,11 +92,5 @@ router.delete('/delete/:id', (req, res) => {
     .then(event => res.json(event))
     .catch(err => res.status(500).send(err))
 })
-
-
-
-
-
-
 
 module.exports = router;

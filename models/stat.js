@@ -15,11 +15,6 @@ module.exports = (sequelize, DataTypes) => {
                 len: [1, 50],
             }
         },
-        // training for distance or time?
-        measurement: {
-            type: DataTypes.ENUM,
-            values: ['Distance', 'Time']
-        },
         //  need to confirm units.  people training for marathons work in miles. people training for 5ks,10ks etc work in KMs.
         unit: {
             type: DataTypes.ENUM,
@@ -32,25 +27,6 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 
             }
-        },
-        //    user will input time in Hours, Minutes and seconds on the front end. The controller (or services) on the backend will turn that value into raw seconds in the database.  Will make it easier to compare values to their goal.   -rce
-        currentHours: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-        currentMinutes: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-        currentSeconds: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-
-        // currentHours*3600 + currentMinutes*60 + currentSeconds = totalSeconds   ....Obvi
-        totalSeconds: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
         },
         owner: {
             type: DataTypes.INTEGER
