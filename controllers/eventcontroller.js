@@ -59,6 +59,48 @@ router.get('/allevents', (req, res) => {
             })
 })
 
+router.put('/update/:id', (req, res) => {
+var eventId = req.params.id;
+
+    var hours = Number(req.body.goalHours)
+    var mins = Number(req.body.goalMinutes)
+    var secs = Number(req.body.goalSeconds)
+    var totalsecs = ((hours*3600)+(mins*60)+(secs))
+
+    Events.update({
+        eventName: req.body.eventName,
+        eventCity: req.body.eventCity,
+        eventState: req.body.eventState,
+        eventDate: req.body.eventDate,
+        eventType:  req.body.eventType,
+        unit: req.body.unit,
+        eventDistance: req.body.eventDistance,
+        goalHours: hours,
+        goalMinutes: mins,
+        goalSeconds: secs,
+        goalTotalSeconds: totalsecs,
+        owner: req.user.id
+    },
+    { where: { id: eventId } }
+    ).then(
+        event => res.json(event),
+        createError = (err) => {
+            res.send(500, err.message);
+        }
+    );
+})
+
+router.delete('/delete/:id', (req, res) => {
+    var eventId = req.params.id;
+    Events.destroy({
+        where: { id: eventId }
+    })
+    .then(event => res.json(event))
+    .catch(err => res.status(500).send(err))
+})
+
+
+
 
 
 

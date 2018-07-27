@@ -42,35 +42,42 @@ router.get('/getall', (req, res) =>{
             })
 })
 
+router.get("/getone/:id", (req, res) => {
+    var statId = req.params.id;
+    Stat.findOne({
+        where: { id: statId }
+    }).then(
+        stat => res.json(stat),
+        err => res.status(500).send(err)
+    )
+})
+
 
 
 //  will take some refactoring depending on front end- maybe
-router.put('/update', (req, res) => {
-    var hours = Number(req.body.stat.currentHours)
-    var mins = Number(req.body.stat.currentMinutes)
-    var secs = Number(req.body.stat.currentSeconds)
+router.put('/update/:id', (req, res) => {
+    var statId = req.params.id;
+
+    var hours = Number(req.body.currentHours)
+    var mins = Number(req.body.currentMinutes)
+    var secs = Number(req.body.currentSeconds)
     var totalsecs = ((hours*3600)+(mins*60)+(secs))
 
     Stat.update({
-        date: req.body.stat.date,
-        discipline:  req.body.stat.discipline,
-        measurement: req.body.stat.measurement,
-        unit: req.body.stat.unit,
-        currentDistance: req.body.stat.currentDistance,
+        date: req.body.date,
+        discipline:  req.body.discipline,
+        measurement: req.body.measurement,
+        unit: req.body.unit,
+        currentDistance: req.body.currentDistance,
         currentHours: hours,
         currentMinutes: mins,
         currentSeconds: secs,
         totalSeconds: totalsecs,
         owner: req.user.id
     },
-    { where: { id: data } }
+    { where: { id: statId } }
     ).then(
-        updateSuccess = (stat) => {
-            res.json({
-                stat: stat,
-                message: 'user base stats have been updated'
-            });
-        },
+        stat => res.json(stat),
         updateError = (err) => {
             res.send(500, err.message);
         }
@@ -78,21 +85,12 @@ router.put('/update', (req, res) => {
 })
 
 router.delete('/delete/:id', (req, res) => {
-    var userid = req.params.id;
-
+    var statId = req.params.id;
     Stat.destroy({
-        where: { id: userid }
-    }).then(
-        deleteLogSuccess = (data) => {
-            res.send("you removed a set of base stats");
-        },
-        deleteLogError = (err) => {
-            res.send(500, err.message);
-        }
-    );
+        where: { id: statId }
+    })
+    .then(stat => res.json(stat))
+    .catch(err => res.status(500).send(err))
 })
-
-
-
 
 module.exports = router;
