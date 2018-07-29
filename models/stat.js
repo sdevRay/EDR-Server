@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('stat', {
         date: {
-            type: DataTypes.STRING,
+            type: DataTypes.DATE,
             allowNull: false,
             validate: {
                 
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         //   user can enter either a current distance they can do, or current time, or both.     -rce
         currentDistance: {
-            type: DataTypes.INTEGER,      
+            type: DataTypes.DECIMAL(10,2),  
             allowNull: true,
             validate: {
                 

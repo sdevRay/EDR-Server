@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
         eventDate: {
-            type: DataTypes.STRING,
+            type: DataTypes.DATE,
             allowNull: false,
             validate: {
                 
