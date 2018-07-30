@@ -56,8 +56,6 @@ router.post('/signin', function (req, res) {
                 } else {
                     res.status(500).send({ error: "User not found" })
                 }
-
-
             },
             (err) => {
                 res.status(501).send({ error: "didn't work" });
